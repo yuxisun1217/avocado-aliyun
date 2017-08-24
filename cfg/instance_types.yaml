@@ -1,0 +1,4 @@
+instance_type:
+    ecs.n1.tiny:
+        cpu: 1
+        memory: 1

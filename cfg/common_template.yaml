@@ -1,0 +1,50 @@
+Common:
+    Distro: aliyun
+    Project: 7.3
+CloudSub:
+    aliyun_access_key_id: <your aliyun access key id>
+    aliyun_access_key_secret: <your aliyun access key secret>
+RedhatSub:
+    username: <Red Hat Subscription username>
+    password: <Red Hat Subscription password>
+VMUser:
+    username: root
+    password: <your vm password>
+    keypairname: <your keypair name>
+Region:
+    id: cn-beijing
+OSDisk:
+    name: rhel-guest-image-7.3-35.x86_64.raw
+    local_path: /home/autotest/vhd/
+    bucket:
+        name: aliautoimages
+        type: Private
+VM:
+    name: aliauto
+    instance_type: ecs.n1.tiny
+Image:
+    name: rhel-guest-image-7.3-35.x86_64
+    id:
+network:
+    vpc:
+        name:
+        id: vpc-2ze03h77z086c1en2rvg9
+        cidr: 172.17.0.0/16
+    vswitch:
+        name:
+        id: vsw-2zeditq2k7hgd12smds70
+        cidr: 172.17.224.0/20
+SecurityGroup:
+    name:
+    id: sg-2zegq49eb2h96hflufnr
+DataDisk:
+    disk_number: 3
+    disk1:
+        size: 50
+        host_caching: None
+    disk2:
+        size: 1023
+        host_caching: ReadOnly
+    disk3:
+        size: 1023
+        host_caching: ReadWrite
