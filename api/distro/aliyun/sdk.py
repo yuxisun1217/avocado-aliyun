@@ -57,7 +57,7 @@ def _send_request(request):
 def _add_params(request, key_list=None, params=None):
     print "==== Query Params ===="
     if params is None:
-        print ""
+        print "None"
         return request
     if key_list:
         for key in key_list:
