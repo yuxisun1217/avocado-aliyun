@@ -136,6 +136,8 @@ class GuestUtils(object):
         :param ignore_status: Ignore return code. Continue even if command run failed
         :return: raise if exception
         """
+        if self.username == "root":
+            sudo = False
         sudo_cmd = "echo %s | sudo -S sh -c \"\"" % self.params.get("password")
         if sudo:
             cmd = "sudo sh -c \"%s\"" % cmd
@@ -144,7 +146,7 @@ class GuestUtils(object):
             try:
                 if sudo:
                     self.session.cmd_output(sudo_cmd)
-                logging.info(cmd)
+#                logging.info(cmd)
                 output = self.session.cmd_output(cmd, timeout).rstrip('\n')
             except (ShellTimeoutError, ShellProcessTerminatedError):
                 logging.info("Run command %s timeout. Retry %d/%d" % (cmd, retry+1, max_retry))

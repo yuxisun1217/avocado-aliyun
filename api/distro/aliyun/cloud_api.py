@@ -1,3 +1,4 @@
+import abc
 import logging
 import time
 
@@ -7,13 +8,13 @@ from utils.globalvars import GlobalVars as g
 
 
 class Base(object):
+    __metaclass__ = abc.ABCMeta
+
     def __init__(self, params):
         self.params = params
-#        self.name = params.get("name")
-#        self.session = None
         self.status = -1
 
-    @property
+    @abc.abstractproperty
     def name(self):
         return self.params.get("Name")
 
@@ -21,13 +22,17 @@ class Base(object):
     def id(self):
         return self.params.get("Id")
 
+    @abc.abstractmethod
+    def show(self):
+        pass
+
     def list(self):
         pass
 
     def create(self, params):
         pass
 
-    def show(self):
+    def delete(self):
         pass
 
     def update(self, params=None):
@@ -44,6 +49,43 @@ class Base(object):
             self.status = 0
         else:
             self.status = -1
+
+    def wait_for_status(self, status, times=g.WAIT_FOR_RETRY_TIMES, interval=g.RETRY_INTERVAL):
+        """
+        Wait for vm status is <status>
+        :param status: The target VM status: created/running/stopped/deleted
+        :param times: Retry times
+        :param interval: Retry interval
+        :return: raise VMStatusError if status is wrong after retry
+        """
+        logging.debug("Waiting for VM {0}...".format(status))
+        for retry in xrange(0, times):
+            self.show()
+            if status == "created":
+                ret = self.exists()
+            elif status == "deleted":
+                ret = not self.exists()
+            else:
+                raise Exception("{0} status {1} is wrong.".format(self.__class__.__name__, status))
+            if ret:
+                logging.debug("{0} is {1}".format(self.__class__.__name__, status))
+                return
+            logging.debug("Retry times: {0}/{1}.".format(retry+1, times))
+            time.sleep(interval)
+        else:
+            raise ValueError("After retry {0} times, {1} is not {2}".format(times, self.__class__.__name__, status))
+
+    def wait_for_created(self):
+        """
+        Wait for vm exists
+        """
+        self.wait_for_status(status="created")
+
+    def wait_for_deleted(self):
+        """
+        Wait for vm exists
+        """
+        self.wait_for_status(status="deleted")
 
 
 class VM(Base, GuestUtils):
@@ -71,13 +113,14 @@ class VM(Base, GuestUtils):
         """
         This show the vm list
         """
-#        params["InstanceId"] = None
+        logging.info("List VMs")
         return sdk.describe_instances(params)
 
     def create(self, params):
         """
         This helps to create a VM
         """
+        logging.info("Create VM")
         params.setdefault("InstanceChargeType", "PostPaid")
         params.setdefault("InternetChargeType", "PayByTraffic")
         params.setdefault("SystemDiskCategory", "cloud_efficiency")
@@ -91,16 +134,31 @@ class VM(Base, GuestUtils):
         """
         This helps to start a VM
         """
+        logging.info("Start VM")
         params = {}
         params.setdefault("InstanceId", self.id)
         return sdk.start_instance(params)
 
-    def stop(self):
+    def stop(self, force=False):
         """
         This helps to stop a VM
         """
+        logging.info("Stop VM")
         params = {}
         params.setdefault("InstanceId", self.id)
+        if force:
+            params.setdefault("ForceStop", "True")
+        return sdk.stop_instance(params)
+
+    def restart(self, force=False):
+        """
+        This helps to restart a VM
+        """
+        logging.info("Restart VM")
+        params = {}
+        params.setdefault("InstanceId", self.id)
+        if force:
+            params.setdefault("ForceStop", "True")
         return sdk.stop_instance(params)
 
     def delete(self):
@@ -108,6 +166,7 @@ class VM(Base, GuestUtils):
         This helps to delete a VM
         The VM can be deleted only if the status is stopped(sdk/cli only)
         """
+        logging.info("Delete VM")
         params = {}
         params.setdefault("InstanceId", self.id)
         if not self.is_stopped():
@@ -247,10 +306,7 @@ class Image(Base):
 
     @property
     def name(self):
-        if self.exists():
-            return self.params.get("ImageName")
-        else:
-            return None
+        return self.params.get("ImageName")
 
     @property
     def id(self):
@@ -258,6 +314,10 @@ class Image(Base):
             return self.params.get("ImageId")
         else:
             return None
+
+    def list(self, params=None):
+        logging.info("List Images")
+        return sdk.describe_images(params)
 
     def show(self):
         logging.info("Show Image params")
@@ -269,8 +329,8 @@ class Image(Base):
 #        print self.params
 
     def create(self, params):
-        logging.info("Create Image")
-        return sdk.create_image(params)
+        sdk.create_image(params)
+        return self.wait_for_created()
 
 
 class KeyPair(Base):
@@ -279,17 +339,28 @@ class KeyPair(Base):
 
     @property
     def name(self):
-        if self.exists():
-            return self.params.get("KeyPairName")
-        else:
-            return None
+        return self.params.get("KeyPairName")
 
     @property
-    def id(self):
+    def fingerprint(self):
+        return self.params.get("KeyPairFingerPrint")
+
+    def show(self):
+        params = {}
+        params.setdefault("KeyPairName", self.name)
+        show_params = sdk.describe_keypairs(params)
+        self._get_status(show_params)
         if self.exists():
-            return self.params.get("KeyPairId")
-        else:
-            return None
+            self.params = show_params["KeyPairs"]["KeyPair"][0]
+
+    def create(self, params):
+        sdk.import_keypair(params)
+        return self.wait_for_created()
+
+    def delete(self):
+        params = {"KeyPairNames", self.name}
+        sdk.delete_keypair(params)
+        return self.wait_for_deleted()
 
 
 class SecurityGroup(Base):
@@ -298,10 +369,7 @@ class SecurityGroup(Base):
 
     @property
     def name(self):
-        if self.exists():
-            return self.params.get("SecurityGroupName")
-        else:
-            return None
+        return self.params.get("SecurityGroupName")
 
     @property
     def id(self):
@@ -310,6 +378,9 @@ class SecurityGroup(Base):
         else:
             return None
 
+    def show(self):
+        pass
+
 
 class VSwitch(Base):
     def __init__(self, params):
@@ -317,14 +388,11 @@ class VSwitch(Base):
 
     @property
     def name(self):
-        if self.exists():
-            return self.params.get("VSwitchName")
-        else:
-            return None
+        return self.params.get("VSwitchName")
 
     @property
     def id(self):
-        if self.exists():
-            return self.params.get("VSwitchId")
-        else:
-            return None
+        return self.params.get("VSwitchId")
+
+    def show(self):
+        pass

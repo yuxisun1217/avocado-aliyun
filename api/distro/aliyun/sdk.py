@@ -47,7 +47,7 @@ def _send_request(request):
     try:
         logging.debug("Run: {0}".format(request.__class__.__name__))
         response_str = clt.do_action_with_exception(request)
-        logging.info(response_str)
+#        logging.info(response_str)
         response_detail = json.loads(response_str)
         return response_detail
     except Exception as e:
@@ -63,7 +63,8 @@ def _add_params(request, key_list=None, params=None):
         for key in key_list:
             if params.get(key) is not None:
                 value = params.get(key)
-                if "Ids" in key:
+                if "Ids" in key or \
+                   "Names" in key:
                     value = str(value.split(',')).replace('\'', '"')
                 eval("request.set_{0}('{1}')".format(key, value))
     print request.get_query_params()
@@ -92,9 +93,9 @@ def create_instance(params):
                 "HostName",
                 "InstanceName",
                 "InternetMaxBandwidthOut",
-                "InternetMaxBandwidthIn"]
-    print "++++++++++++++++"
-    print params
+                "InternetMaxBandwidthIn",
+                "RegionId",
+                "ZoneId"]
     request = _add_params(request, key_list, params)
     return _send_request(request)
 
@@ -108,14 +109,16 @@ def start_instance(params):
 
 def stop_instance(params):
     request = StopInstanceRequest()
-    key_list = ["InstanceId"]
+    key_list = ["InstanceId",
+                "ForceStop"]
     request = _add_params(request, key_list, params)
     return _send_request(request)
 
 
 def reboot_instance(params):
     request = RebootInstanceRequest()
-    key_list = ["InstanceId"]
+    key_list = ["InstanceId",
+                "ForceStop"]
     request = _add_params(request, key_list, params)
     return _send_request(request)
 
@@ -143,6 +146,14 @@ def allocate_public_ip_address(params):
 
 
 # KeyPair
+def describe_keypairs(params):
+    request = DescribeKeyPairsRequest()
+    key_list = ["KeyPairName",
+                "RegionId"]
+    request = _add_params(request, key_list, params)
+    return _send_request(request)
+
+
 def create_keypair(params):
     request = CreateKeyPairRequest()
     key_list = ["KeyPairName",
@@ -156,6 +167,14 @@ def import_keypair(params):
     key_list = ["KeyPairName",
                 "RegionId",
                 "PublicKeyBody"]
+    request = _add_params(request, key_list, params)
+    return _send_request(request)
+
+
+def delete_keypair(params):
+    request = DeleteKeyPairsRequest()
+    key_list = ["KeyPairNames",
+                "RegionId"]
     request = _add_params(request, key_list, params)
     return _send_request(request)
 

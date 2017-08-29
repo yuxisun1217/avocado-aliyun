@@ -19,7 +19,6 @@ class Setup(object):
         self.disk_list = []
         self.vm_test01 = None
         self.disk_test01 = None
-        self.host_pubkey_file = utils_misc.get_sshkey_file()
         self.distro = self.params.get('Distro', '*/Common/*')
         self.project = self.params.get('Project', '*/Common/*')
         self.redhat_username = self.params.get('username', '*/RedhatSub/*')
@@ -47,12 +46,14 @@ class Setup(object):
         self.vm_params["region"] = self.params.get('id', "*/Region/*")
         vmname_tag = kwargs.get("vmname_tag", "").replace("_", "")
         self.vm_params["InstanceName"] = self.params.get('name', '*/VM/*') + \
+                                         str(self.project).replace('.', '') + \
                                          self.vm_params["InstanceType"][4:].lower().replace(".", "") + \
                                          vmname_tag
         self.vm_params["HostName"] = self.vm_params["InstanceName"]
         self.vm_params["username"] = self.params.get('username', '*/VMUser/*')
         self.vm_params["password"] = self.params.get('password', '*/VMUser/*')
         self.vm_params["KeyPairName"] = self.params.get('keypairname', '*/VMUser/*')
+        self._check_key_pair()
         self.vm_params["ImageId"] = self.params.get('id', '*/Image/*')
         if self.vm_params["ImageId"] is None:
             self.vm_params["ImageName"] = self.params.get('name', '*/Image/*')
@@ -79,6 +80,20 @@ class Setup(object):
                 self.vm_params[param] = kwargs.get(param)
         logging.info(str(self.vm_params))
         self.vm_test01 = self.vm.VM(self.vm_params)
+
+    def _check_key_pair(self):
+        key_pair_params = {"KeyPairName": self.vm_params["KeyPairName"]}
+        key_pair = self.vm.KeyPair(key_pair_params)
+        key_pair.show()
+        if key_pair.exists():
+            ssh_key = utils_misc.get_ssh_key()
+            if not ssh_key.get("fingerprint") == key_pair.fingerprint:
+                logging.info("KeyPair fingerprint is not match. Remove old KeyPair")
+                key_pair.delete()
+        if not key_pair.exists():
+            ssh_key = utils_misc.get_ssh_key()
+            key_pair_params.setdefault("PublicKeyBody", ssh_key.get("content"))
+            key_pair.create(key_pair_params)
 
     def _config_aliyun(self, params):
         access_key_id = params.get('aliyun_access_key_id')
