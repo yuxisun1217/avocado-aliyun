@@ -86,15 +86,15 @@ class Setup(object):
         key_pair_params = {"KeyPairName": self.vm_params["KeyPairName"]}
         key_pair = self.vm.KeyPair(key_pair_params)
         key_pair.show()
-#        if key_pair.exists():
-#            ssh_key = utils_misc.get_sshkey_file()
-#            if not ssh_key.get("fingerprint") == key_pair.fingerprint:
-#                logging.info("KeyPair fingerprint is not match. Remove old KeyPair")
-#                key_pair.delete()
-#        if not key_pair.exists():
-#            ssh_key = utils_misc.get_sshkey_file()
-#            key_pair_params.setdefault("PublicKeyBody", ssh_key.get("content"))
-#            key_pair.create(key_pair_params)
+        if key_pair.exists():
+            ssh_key = utils_misc.get_ssh_key()
+            if not ssh_key.get("fingerprint") == key_pair.fingerprint:
+                logging.info("KeyPair fingerprint is not match. Remove old KeyPair")
+                key_pair.delete()
+        if not key_pair.exists():
+            ssh_key = utils_misc.get_ssh_key()
+            key_pair_params.setdefault("PublicKeyBody", ssh_key.get("content"))
+            key_pair.create(key_pair_params)
 
     def _config_aliyun(self, params):
         access_key_id = params.get('aliyun_access_key_id')
