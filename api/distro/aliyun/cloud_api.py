@@ -159,7 +159,7 @@ class VM(Base, GuestUtils):
         params.setdefault("InstanceId", self.id)
         if force:
             params.setdefault("ForceStop", "True")
-        return sdk.stop_instance(params)
+        return sdk.reboot_instance(params)
 
     def delete(self):
         """
@@ -178,6 +178,7 @@ class VM(Base, GuestUtils):
         logging.info("Show VM params")
         params = {}
         params.setdefault("InstanceName", self.name)
+        params.setdefault("RegionId", self.params.get("RegionId"))
         show_params = sdk.describe_instances(params)
         self._get_status(show_params)
         if self.exists():
@@ -278,7 +279,7 @@ class VM(Base, GuestUtils):
                 self.status = 0
             else:
                 self.status = 1
-        logging.info("VM status code: %d", self.status)
+#        logging.info("VM status code: %d", self.status)
 
     def allocate_public_address(self):
         """
@@ -298,6 +299,15 @@ class VM(Base, GuestUtils):
             return public_ip_list[0]
         else:
             return None
+
+    def modify_instance_type(self, new_type):
+        """
+        Modify Instance Type
+        """
+        params = {}
+        params.setdefault("InstanceId", self.id)
+        params.setdefault("InstanceType", new_type)
+        return sdk.modify_instance_spec(params)
 
 
 class Image(Base):

@@ -137,6 +137,16 @@ def describe_instance_attribute(params):
     return _send_request(request)
 
 
+def modify_instance_spec(params):
+    request = ModifyInstanceSpecRequest()
+    key_list = ["InstanceId",
+                "InstanceType",
+                "InternetMaxBandwidthIn",
+                "InternetMaxBandwidthOut"]
+    request = _add_params(request, key_list, params)
+    return _send_request(request)
+
+
 # Public IP
 def allocate_public_ip_address(params):
     request = AllocatePublicIpAddressRequest()

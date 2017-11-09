@@ -1,4 +1,643 @@
 instance_type:
+    ecs.t1.xsmall:
+        cpu: 1
+        memory: 0.5
+    ecs.t1.small:
+        cpu: 1
+        memory: 1.0
+    ecs.s2.small:
+        cpu: 2
+        memory: 2.0
+    ecs.s3.medium:
+        cpu: 4
+        memory: 4.0
+    ecs.c1.small:
+        cpu: 8
+        memory: 8.0
+    ecs.c2.medium:
+        cpu: 16
+        memory: 16.0
+    ecs.s1.small:
+        cpu: 1
+        memory: 2.0
+    ecs.s2.large:
+        cpu: 2
+        memory: 4.0
+    ecs.s3.large:
+        cpu: 4
+        memory: 8.0
+    ecs.c1.large:
+        cpu: 8
+        memory: 16.0
+    ecs.c2.large:
+        cpu: 16
+        memory: 32.0
+    ecs.s1.medium:
+        cpu: 1
+        memory: 4.0
+    ecs.s2.xlarge:
+        cpu: 2
+        memory: 8.0
+    ecs.m1.medium:
+        cpu: 4
+        memory: 16.0
+    ecs.m1.xlarge:
+        cpu: 8
+        memory: 32.0
+    ecs.c2.xlarge:
+        cpu: 16
+        memory: 64.0
+    ecs.s1.large:
+        cpu: 1
+        memory: 8.0
+    ecs.s2.2xlarge:
+        cpu: 2
+        memory: 16.0
+    ecs.m2.medium:
+        cpu: 4
+        memory: 32.0
+    ecs.m2.xlarge:
+        cpu: 8
+        memory: 64.0
     ecs.n1.tiny:
         cpu: 1
-        memory: 1
+        memory: 1.0
+    ecs.n1.small:
+        cpu: 1
+        memory: 2.0
+    ecs.n1.medium:
+        cpu: 2
+        memory: 4.0
+    ecs.n1.large:
+        cpu: 4
+        memory: 8.0
+    ecs.n1.xlarge:
+        cpu: 8
+        memory: 16.0
+    ecs.n1.3xlarge:
+        cpu: 16
+        memory: 32.0
+    ecs.n1.7xlarge:
+        cpu: 32
+        memory: 64.0
+    ecs.n2.small:
+        cpu: 1
+        memory: 4.0
+    ecs.n2.medium:
+        cpu: 2
+        memory: 8.0
+    ecs.n2.large:
+        cpu: 4
+        memory: 16.0
+    ecs.n2.xlarge:
+        cpu: 8
+        memory: 32.0
+    ecs.n2.3xlarge:
+        cpu: 16
+        memory: 64.0
+    ecs.n2.7xlarge:
+        cpu: 32
+        memory: 128.0
+    ecs.e3.small:
+        cpu: 1
+        memory: 8.0
+    ecs.e3.medium:
+        cpu: 2
+        memory: 16.0
+    ecs.e3.large:
+        cpu: 4
+        memory: 32.0
+    ecs.e3.xlarge:
+        cpu: 8
+        memory: 64.0
+    ecs.e3.3xlarge:
+        cpu: 16
+        memory: 128.0
+    ecs.e3.7xlarge:
+        cpu: 32
+        memory: 256.0
+    ecs.sn1.medium:
+        cpu: 2
+        memory: 4.0
+    ecs.sn2.medium:
+        cpu: 2
+        memory: 8.0
+    ecs.sn1.large:
+        cpu: 4
+        memory: 8.0
+    ecs.sn1.xlarge:
+        cpu: 8
+        memory: 16.0
+    ecs.sn1.3xlarge:
+        cpu: 16
+        memory: 32.0
+    ecs.sn1.7xlarge:
+        cpu: 32
+        memory: 64.0
+    ecs.sn2.large:
+        cpu: 4
+        memory: 16.0
+    ecs.sn2.xlarge:
+        cpu: 8
+        memory: 32.0
+    ecs.sn2.3xlarge:
+        cpu: 16
+        memory: 64.0
+    ecs.sn2.7xlarge:
+        cpu: 32
+        memory: 128.0
+    ecs.n4.small:
+        cpu: 1
+        memory: 2.0
+    ecs.n4.large:
+        cpu: 2
+        memory: 4.0
+    ecs.n4.xlarge:
+        cpu: 4
+        memory: 8.0
+    ecs.n4.2xlarge:
+        cpu: 8
+        memory: 16.0
+    ecs.n4.4xlarge:
+        cpu: 16
+        memory: 32.0
+    ecs.n4.8xlarge:
+        cpu: 32
+        memory: 64.0
+    ecs.mn4.small:
+        cpu: 1
+        memory: 4.0
+    ecs.mn4.large:
+        cpu: 2
+        memory: 8.0
+    ecs.mn4.xlarge:
+        cpu: 4
+        memory: 16.0
+    ecs.mn4.2xlarge:
+        cpu: 8
+        memory: 32.0
+    ecs.mn4.4xlarge:
+        cpu: 16
+        memory: 64.0
+    ecs.mn4.8xlarge:
+        cpu: 32
+        memory: 128.0
+    ecs.xn4.small:
+        cpu: 1
+        memory: 1.0
+    ecs.e4.large:
+        cpu: 2
+        memory: 16.0
+    ecs.e4.xlarge:
+        cpu: 4
+        memory: 32.0
+    ecs.e4.2xlarge:
+        cpu: 8
+        memory: 64.0
+    ecs.e4.4xlarge:
+        cpu: 16
+        memory: 128.0
+    ecs.gn3.2xlarge:
+        cpu: 12
+        memory: 24.0
+    ecs.sn2.13xlarge:
+        cpu: 56
+        memory: 224.0
+    ecs.e4.small:
+        cpu: 1
+        memory: 8.0
+    ecs.se1.large:
+        cpu: 2
+        memory: 16.0
+    ecs.se1.xlarge:
+        cpu: 4
+        memory: 32.0
+    ecs.se1.2xlarge:
+        cpu: 8
+        memory: 64.0
+    ecs.se1.4xlarge:
+        cpu: 16
+        memory: 128.0
+    ecs.se1.8xlarge:
+        cpu: 32
+        memory: 256.0
+    ecs.se1.14xlarge:
+        cpu: 56
+        memory: 480.0
+    ecs.ga1.4xlarge:
+        cpu: 16
+        memory: 40.0
+    ecs.ga1.8xlarge:
+        cpu: 32
+        memory: 80.0
+    ecs.ga1.14xlarge:
+        cpu: 56
+        memory: 160.0
+    ecs.gn4.8xlarge:
+        cpu: 32
+        memory: 48.0
+    ecs.gn4.14xlarge:
+        cpu: 56
+        memory: 96.0
+    ecs.i1.xlarge:
+        cpu: 4
+        memory: 16.0
+    ecs.i1.2xlarge:
+        cpu: 8
+        memory: 32.0
+    ecs.i1.4xlarge:
+        cpu: 16
+        memory: 64.0
+    ecs.i1.8xlarge:
+        cpu: 32
+        memory: 128.0
+    ecs.i1.14xlarge:
+        cpu: 56
+        memory: 224.0
+    ecs.cm4.xlarge:
+        cpu: 4
+        memory: 16.0
+    ecs.cm4.2xlarge:
+        cpu: 8
+        memory: 32.0
+    ecs.cm4.4xlarge:
+        cpu: 16
+        memory: 64.0
+    ecs.ce4.xlarge:
+        cpu: 4
+        memory: 32.0
+    ecs.c4.xlarge:
+        cpu: 4
+        memory: 8.0
+    ecs.c4.2xlarge:
+        cpu: 8
+        memory: 16.0
+    ecs.c4.4xlarge:
+        cpu: 16
+        memory: 32.0
+    ecs.cm4.6xlarge:
+        cpu: 24
+        memory: 96.0
+    ecs.sc1.4xlarge:
+        cpu: 16
+        memory: 16.0
+    ecs.d1.2xlarge:
+        cpu: 8
+        memory: 32.0
+    ecs.d1.4xlarge:
+        cpu: 16
+        memory: 64.0
+    ecs.d1.6xlarge:
+        cpu: 24
+        memory: 96.0
+    ecs.d1.8xlarge:
+        cpu: 32
+        memory: 128.0
+    ecs.d1.14xlarge:
+        cpu: 56
+        memory: 224.0
+    ecs.ga1.2xlarge:
+        cpu: 8
+        memory: 20.0
+    ecs.ga1.xlarge:
+        cpu: 4
+        memory: 10.0
+    ecs.sn1ne.large:
+        cpu: 2
+        memory: 4.0
+    ecs.sn1ne.xlarge:
+        cpu: 4
+        memory: 8.0
+    ecs.sn1ne.2xlarge:
+        cpu: 8
+        memory: 16.0
+    ecs.sn1ne.4xlarge:
+        cpu: 16
+        memory: 32.0
+    ecs.sn1ne.8xlarge:
+        cpu: 32
+        memory: 64.0
+    ecs.sn2ne.large:
+        cpu: 2
+        memory: 8.0
+    ecs.sn2ne.xlarge:
+        cpu: 4
+        memory: 16.0
+    ecs.sn2ne.2xlarge:
+        cpu: 8
+        memory: 32.0
+    ecs.sn2ne.4xlarge:
+        cpu: 16
+        memory: 64.0
+    ecs.sn2ne.8xlarge:
+        cpu: 32
+        memory: 128.0
+    ecs.sn2ne.14xlarge:
+        cpu: 56
+        memory: 224.0
+    ecs.se1ne.large:
+        cpu: 2
+        memory: 16.0
+    ecs.se1ne.xlarge:
+        cpu: 4
+        memory: 32.0
+    ecs.se1ne.2xlarge:
+        cpu: 8
+        memory: 64.0
+    ecs.se1ne.4xlarge:
+        cpu: 16
+        memory: 128.0
+    ecs.se1ne.8xlarge:
+        cpu: 32
+        memory: 256.0
+    ecs.se1ne.14xlarge:
+        cpu: 56
+        memory: 480.0
+    ecs.i1-c10d1.8xlarge:
+        cpu: 32
+        memory: 128.0
+    ecs.i1-c5d1.4xlarge:
+        cpu: 16
+        memory: 64.0
+    ecs.f1-c8f1.2xlarge:
+        cpu: 8
+        memory: 60.0
+    ecs.gn5-c4g1.xlarge:
+        cpu: 4
+        memory: 30.0
+    ecs.gn5-c8g1.2xlarge:
+        cpu: 8
+        memory: 60.0
+    ecs.gn5-c4g1.2xlarge:
+        cpu: 8
+        memory: 60.0
+    ecs.gn5-c8g1.4xlarge:
+        cpu: 16
+        memory: 120.0
+    ecs.gn5-c8g1.8xlarge:
+        cpu: 32
+        memory: 240.0
+    ecs.gn5-c8g1.14xlarge:
+        cpu: 54
+        memory: 480.0
+    ecs.gn4-c4g1.xlarge:
+        cpu: 4
+        memory: 30.0
+    ecs.gn4-c8g1.2xlarge:
+        cpu: 8
+        memory: 30.0
+    ecs.gn4-c4g1.2xlarge:
+        cpu: 8
+        memory: 60.0
+    ecs.gn4-c8g1.4xlarge:
+        cpu: 16
+        memory: 60.0
+    ecs.d1ne.2xlarge:
+        cpu: 8
+        memory: 32.0
+    ecs.d1ne.4xlarge:
+        cpu: 16
+        memory: 64.0
+    ecs.d1ne.6xlarge:
+        cpu: 24
+        memory: 96.0
+    ecs.d1ne.8xlarge:
+        cpu: 32
+        memory: 128.0
+    ecs.d1ne.14xlarge:
+        cpu: 56
+        memory: 224.0
+    ecs.d1-c8d3.8xlarge:
+        cpu: 32
+        memory: 128.0
+    ecs.d1-c14d3.14xlarge:
+        cpu: 56
+        memory: 160.0
+    ecs.c5.large:
+        cpu: 2
+        memory: 4.0
+    ecs.c5.xlarge:
+        cpu: 4
+        memory: 8.0
+    ecs.c5.2xlarge:
+        cpu: 8
+        memory: 16.0
+    ecs.c5.4xlarge:
+        cpu: 16
+        memory: 32.0
+    ecs.c5.6xlarge:
+        cpu: 24
+        memory: 48.0
+    ecs.c5.8xlarge:
+        cpu: 32
+        memory: 64.0
+    ecs.c5.16xlarge:
+        cpu: 64
+        memory: 128.0
+    ecs.g5.large:
+        cpu: 2
+        memory: 8.0
+    ecs.g5.xlarge:
+        cpu: 4
+        memory: 16.0
+    ecs.g5.2xlarge:
+        cpu: 8
+        memory: 32.0
+    ecs.g5.4xlarge:
+        cpu: 16
+        memory: 64.0
+    ecs.g5.6xlarge:
+        cpu: 24
+        memory: 96.0
+    ecs.g5.8xlarge:
+        cpu: 32
+        memory: 128.0
+    ecs.g5.16xlarge:
+        cpu: 64
+        memory: 256.0
+    ecs.r5.large:
+        cpu: 2
+        memory: 16.0
+    ecs.r5.xlarge:
+        cpu: 4
+        memory: 32.0
+    ecs.r5.2xlarge:
+        cpu: 8
+        memory: 64.0
+    ecs.r5.4xlarge:
+        cpu: 16
+        memory: 128.0
+    ecs.r5.6xlarge:
+        cpu: 24
+        memory: 192.0
+    ecs.r5.8xlarge:
+        cpu: 32
+        memory: 256.0
+    ecs.r5.16xlarge:
+        cpu: 64
+        memory: 512.0
+    ecs.r5.22xlarge:
+        cpu: 88
+        memory: 704.0
+    ecs.hfc5.large:
+        cpu: 2
+        memory: 4.0
+    ecs.hfc5.xlarge:
+        cpu: 4
+        memory: 8.0
+    ecs.hfc5.2xlarge:
+        cpu: 8
+        memory: 16.0
+    ecs.hfc5.4xlarge:
+        cpu: 16
+        memory: 32.0
+    ecs.hfc5.6xlarge:
+        cpu: 24
+        memory: 48.0
+    ecs.hfc5.8xlarge:
+        cpu: 32
+        memory: 64.0
+    ecs.hfg5.large:
+        cpu: 2
+        memory: 8.0
+    ecs.hfg5.xlarge:
+        cpu: 4
+        memory: 16.0
+    ecs.hfg5.2xlarge:
+        cpu: 8
+        memory: 32.0
+    ecs.hfg5.4xlarge:
+        cpu: 16
+        memory: 64.0
+    ecs.hfg5.6xlarge:
+        cpu: 24
+        memory: 96.0
+    ecs.hfg5.8xlarge:
+        cpu: 32
+        memory: 128.0
+    ecs.hfg5.14xlarge:
+        cpu: 56
+        memory: 160.0
+    ecs.i2.xlarge:
+        cpu: 4
+        memory: 32.0
+    ecs.i2.2xlarge:
+        cpu: 8
+        memory: 64.0
+    ecs.i2.4xlarge:
+        cpu: 16
+        memory: 128.0
+    ecs.i2.8xlarge:
+        cpu: 32
+        memory: 256.0
+    ecs.i2.16xlarge:
+        cpu: 64
+        memory: 512.0
+    ecs.gn5-c28g1.7xlarge:
+        cpu: 28
+        memory: 112.0
+    ecs.gn5-c28g1.14xlarge:
+        cpu: 56
+        memory: 224.0
+    ecs.re4.20xlarge:
+        cpu: 80
+        memory: 992.0
+    ecs.re4.40xlarge:
+        cpu: 160
+        memory: 1984.0
+    ecs.gn5i-c2g1.large:
+        cpu: 2
+        memory: 8.0
+    ecs.gn5i-c4g1.xlarge:
+        cpu: 4
+        memory: 16.0
+    ecs.gn5i-c8g1.2xlarge:
+        cpu: 8
+        memory: 32.0
+    ecs.gn5i-c16g1.4xlarge:
+        cpu: 16
+        memory: 64.0
+    ecs.gn5i-c28g1.14xlarge:
+        cpu: 56
+        memory: 224.0
+    ecs.gn5t.7xlarge:
+        cpu: 28
+        memory: 112.0
+    ecs.gn5t.14xlarge:
+        cpu: 56
+        memory: 224.0
+    ecs.t5-c1m1.large:
+        cpu: 2
+        memory: 2.0
+    ecs.t5-c1m1.xlarge:
+        cpu: 4
+        memory: 4.0
+    ecs.t5-c1m1.2xlarge:
+        cpu: 8
+        memory: 8.0
+    ecs.t5-c1m2.large:
+        cpu: 2
+        memory: 4.0
+    ecs.t5-c1m2.xlarge:
+        cpu: 4
+        memory: 8.0
+    ecs.t5-c1m2.2xlarge:
+        cpu: 8
+        memory: 16.0
+    ecs.t5-c1m4.large:
+        cpu: 2
+        memory: 8.0
+    ecs.t5-c1m4.xlarge:
+        cpu: 4
+        memory: 16.0
+    ecs.t5-c1m4.2xlarge:
+        cpu: 8
+        memory: 32.0
+    ecs.t5-lc2m1.nano:
+        cpu: 1
+        memory: 0.5
+    ecs.t5-lc1m1.small:
+        cpu: 1
+        memory: 1.0
+    ecs.t5-lc1m2.small:
+        cpu: 1
+        memory: 2.0
+    ecs.t5-lc1m2.large:
+        cpu: 2
+        memory: 4.0
+    ecs.t5-lc1m4.large:
+        cpu: 2
+        memory: 8.0
+    ecs.f1-c28f1.7xlarge:
+        cpu: 28
+        memory: 112.0
+    ecs.sccg5.24xlarge:
+        cpu: 96
+        memory: 384.0
+    ecs.scch5.16xlarge:
+        cpu: 64
+        memory: 192.0
+    ecs.sccgn5d.16xlarge:
+        cpu: 64
+        memory: 256.0
+    ecs.sccgn5.16xlarge:
+        cpu: 64
+        memory: 512.0
+    ecs.ebmg5.24xlarge:
+        cpu: 96
+        memory: 384.0
+    ecs.ebmr5.24xlarge:
+        cpu: 96
+        memory: 768.0
+    ecs.f2-c8f1.2xlarge:
+        cpu: 8
+        memory: 60.0
+    ecs.f2-c28f1.7xlarge:
+        cpu: 28
+        memory: 112.0
+    ecs.f2-c8f1.4xlarge:
+        cpu: 16
+        memory: 120.0
+    ecs.f2-c28f1.14xlarge:
+        cpu: 56
+        memory: 224.0

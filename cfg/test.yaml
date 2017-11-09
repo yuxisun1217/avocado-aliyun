@@ -1,0 +1,4 @@
+test:
+    !include : common.yaml
+    !include : instance_types.yaml
+    !include : cases_function.yaml

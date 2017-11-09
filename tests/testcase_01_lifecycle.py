@@ -20,9 +20,10 @@ class LifeCycleTest(Test):
         self.vm_test01 = prep.vm_test01
         self.vm_params = prep.vm_params
         args = []
-        if "create_ecs" in self.name.name:
+        if "test_create_ecs" in self.name.name:
             args.append("pre-delete")
-        if "start_ecs" in self.name.name:
+        if "test_start_ecs" in self.name.name or \
+           "test_modify_instance_type" in self.name.name:
             args.append("pre-stop")
         prep.vm_prepare(args)
 
@@ -87,19 +88,31 @@ class LifeCycleTest(Test):
         self.assertNotEqual(before, after,
                             "Force restart error: ECS is not restarted")
 
+    def test_reboot_inside_vm(self):
+        self.log.info("Reboot inside VM")
+        before = self.vm_test01.get_output("who -b")
+        self.vm_test01.get_output("reboot")
+        time.sleep(30)
+        self.assertTrue(self.vm_test01.wait_for_login(),
+                        "Fail to access to VM")
+        after = self.vm_test01.get_output("who -b")
+        self.assertNotEqual(before, after,
+                            "Restart error: ECS is not restarted")
+
+    def test_modify_instance_type(self):
+        self.log.info("Modify ECS instance type")
+        self.vm_test01.modify_instance_type(new_type="ecs.n1.medium")
+        self.vm_test01.start()
+        self.vm_test01.wait_for_running()
+        self.vm_test01.wait_for_login()
+        cpu = self.vm_test01.get_output("cat /proc/cpuinfo|grep processor|wc -l")
+        memory = self.vm_test01.get_output("cat /proc/meminfo|grep MemTotal")
+        cpu_std = self.params.get("cpu")
+
     def test_delete_ecs(self):
         self.log.info("Delete ECS")
         self.vm_test01.delete()
         self.vm_test01.wait_for_deleted()
 
-    def test_reboot_inside_vm(self):
-        self.log.info("Reboot inside VM")
-        self.vm_test01.get_output("reboot")
-        time.sleep(30)
-        self.assertTrue(self.vm_test01.wait_for_login(),
-                        "Fail to access to VM")
-
-
     def tearDown(self):
         self.log.info("Tear Down")
-        pass

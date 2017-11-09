@@ -286,27 +286,28 @@ def check_dns(dns):
         return True
 
 
-def host_command(cmd="", ret='stdout', **kwargs):
-    """
+#def host_command(cmd="", ret='stdout', **kwargs):
+#    """
+#
+#    :param ret: stdout: return stdout; exit_status: return exit_status
+#    :param cmd:
+#    :return:
+#    """
+#    if ret == 'exit_status':
+#        return command(cmd, **kwargs).exit_status
+#    elif ret == 'stdout':
+#        return command(cmd, **kwargs).stdout
+#    else:
+#        return command(cmd, **kwargs)
+#
+#
+def get_ssh_key():
+    home_path = os.path.expanduser('~')
+    ssh_key_file = "{0}/.ssh/id_rsa.pub".format(home_path)
+    if not os.path.isfile(ssh_key_file):
+        command("cat /dev/zero | ssh-keygen -q -N ''", ignore_status=True)
+    fingerprint = command("ssh-keygen -l -f {0}|grep RSA".format(ssh_key_file)).stdout
+    fingerprint = fingerprint.split()[1].replace(':', '')
+    content = command(r"cat {0}".format(ssh_key_file)).stdout.rstrip('\n')
+    return {"file": ssh_key_file, "fingerprint": fingerprint, "content": content}
 
-    :param ret: stdout: return stdout; exit_status: return exit_status
-    :param cmd:
-    :return:
-    """
-    if ret == 'exit_status':
-        return command(cmd, **kwargs).exit_status
-    elif ret == 'stdout':
-        return command(cmd, **kwargs).stdout
-    else:
-        return command(cmd, **kwargs)
-
-
-def get_sshkey_file():
-    myname = host_command("whoami").strip('\n')
-    if myname == 'root':
-        sshkey_file = "/%s/.ssh/id_rsa.pub" % myname
-    else:
-        sshkey_file = "/home/%s/.ssh/id_rsa.pub" % myname
-    if not os.path.isfile(sshkey_file):
-        host_command("cat /dev/zero | ssh-keygen -q -N ''", ignore_status=True)
-    return sshkey_file

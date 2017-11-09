@@ -19,6 +19,8 @@ class GeneralTest(Test):
         self.project = prep.project
         self.vm_test01 = prep.vm_test01
         self.vm_params = prep.vm_params
+        if "validation" in self.name.name:
+            return
         args = []
         if "create_ecs" in self.name.name:
             args.append("pre-delete")
@@ -56,6 +58,42 @@ class GeneralTest(Test):
         for module in module_list:
             self.assertIn(module, output,
                           "%s module doesn't exist" % module)
+
+    def test_validation(self):
+        self.log.info("Validation test")
+        region_list = ["us-west-1"]
+        instance_type_list = ["ecs.n1.tiny",
+                              "ecs.xn4.small"]
+        error_msg = ""
+        for region in region_list:
+            self.vm_test01["RegionId"] = region
+            # Create and start instances
+            for instance_type in instance_type_list:
+                self.vm_test01["InstanceType"] = instance_type
+                self.vm_params["InstanceName"] = self.params.get('name', '*/VM/*') + \
+                                                str(self.project).replace('.', '') + \
+                                                self.vm_params["InstanceType"][4:].lower().replace(".", "")
+                self.log.info("Creating ECS. Region:{0}, Instance type:{1}".format(region, instance_type))
+                self.vm_test01.create(self.vm_params)
+                self.vm_test01.wait_for_created()
+                self.vm_test01.allocate_public_address()
+                self.vm_test01.start()
+            # Login instnaces and check
+            for instance_type in instance_type_list:
+                self.vm_test01.wait_for_running()
+                if not self.vm_test01.wait_for_login():
+                    tmp_msg = "Fail to login. Region:{0}, Instance type:{1}".format(region, instance_type)
+                    self.log.error(tmp_msg)
+                    error_msg += tmp_msg + '\n'
+                    continue
+                std_cpu = self.params.get('cpu', '*/{0}/*'.format(instance_type))
+                real_cpu = self.vm_test01.get_output("grep processor /proc/cpuinfo|wc -l")
+                if int(real_cpu) != int(std_cpu):
+                    error_msg += "CPU number is wrong. Region:{0}, Instance type:{1}, "\
+                                 "Standard:{2}, Real:{3}\n".format(region, instance_type, std_cpu, real_cpu)
+        if error_msg != "":
+            self.fail("Validation test failed. Error messages:\n"+error_msg)
+
 
     def tearDown(self):
         self.log.info("TearDown")

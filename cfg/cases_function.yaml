@@ -1,0 +1,11 @@
+cases:
+    LifeCycleTest.test_start_ecs
+    LifeCycleTest.test_restart_ecs
+    LifeCycleTest.test_stop_ecs
+    LifeCycleTest.test_reboot_inside_vm
+    GeneralTest.test_verify_package_signed
+    GeneralTest.test_check_hostname
+    GeneralTest.test_check_release_version
+    GeneralTest.test_check_boot_message
+    GeneralTest.test_check_kvm_pv_drivers
+    GeneralTest.test_validation
