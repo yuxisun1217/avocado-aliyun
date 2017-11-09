@@ -51,9 +51,10 @@ class Setup(object):
                                          vmname_tag
         self.vm_params["HostName"] = self.vm_params["InstanceName"]
         self.vm_params["username"] = self.params.get('username', '*/VMUser/*')
-        self.vm_params["password"] = self.params.get('password', '*/VMUser/*')
+        self.vm_params["Password"] = self.params.get('password', '*/VMUser/*')
         self.vm_params["KeyPairName"] = self.params.get('keypairname', '*/VMUser/*')
         self._check_key_pair()
+        self.vm_params["ZoneId"] = self.params.get('id', '*/Zone/*')
         self.vm_params["ImageId"] = self.params.get('id', '*/Image/*')
         if self.vm_params["ImageId"] is None:
             self.vm_params["ImageName"] = self.params.get('name', '*/Image/*')
@@ -85,15 +86,15 @@ class Setup(object):
         key_pair_params = {"KeyPairName": self.vm_params["KeyPairName"]}
         key_pair = self.vm.KeyPair(key_pair_params)
         key_pair.show()
-        if key_pair.exists():
-            ssh_key = utils_misc.get_ssh_key()
-            if not ssh_key.get("fingerprint") == key_pair.fingerprint:
-                logging.info("KeyPair fingerprint is not match. Remove old KeyPair")
-                key_pair.delete()
-        if not key_pair.exists():
-            ssh_key = utils_misc.get_ssh_key()
-            key_pair_params.setdefault("PublicKeyBody", ssh_key.get("content"))
-            key_pair.create(key_pair_params)
+#        if key_pair.exists():
+#            ssh_key = utils_misc.get_sshkey_file()
+#            if not ssh_key.get("fingerprint") == key_pair.fingerprint:
+#                logging.info("KeyPair fingerprint is not match. Remove old KeyPair")
+#                key_pair.delete()
+#        if not key_pair.exists():
+#            ssh_key = utils_misc.get_sshkey_file()
+#            key_pair_params.setdefault("PublicKeyBody", ssh_key.get("content"))
+#            key_pair.create(key_pair_params)
 
     def _config_aliyun(self, params):
         access_key_id = params.get('aliyun_access_key_id')
@@ -126,7 +127,7 @@ class Setup(object):
         if "pre-stop" in args:
             logging.info("Pre stop VM")
             if not self.vm_test01.is_stopped():
-                self.vm_test01.stop()
+                self.vm_test01.stop(force=True)
                 self.vm_test01.wait_for_stopped()
             return True
         # If need running VM, start it
@@ -147,6 +148,17 @@ class Setup(object):
             raise Exception("VM %s is not available. Exit." % self.vm_params["InstanceName"])
         logging.info("Setup successfully.")
         return True
+
+    def disk_prepare(self, disk_count=1):
+        output = self.vm_test01.describe_disks(self.vm_params)
+        if output.get("TotalCount") < disk_count:
+            i = 0
+            while i < (disk_count - output.get("TotalCount")):
+                self.vm_test01.create_disk(self.vm_params)
+                i = i + 1
+        output = self.vm_test01.describe_disks(self.vm_params)
+        disk_ids = list(disk['DiskId'] for disk in output.get("Disks").get("Disk"))
+        self.vm_params["AttachDiskIds"] = disk_ids
 
     def selected_case(self, case):
         case_name = case.name.split(':')[-1]

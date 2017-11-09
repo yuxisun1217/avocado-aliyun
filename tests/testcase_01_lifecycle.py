@@ -20,6 +20,8 @@ class LifeCycleTest(Test):
         self.vm_test01 = prep.vm_test01
         self.vm_params = prep.vm_params
         args = []
+        if "password" in self.name.name:
+            args.append("password")
         if "test_create_ecs" in self.name.name:
             args.append("pre-delete")
         if "test_start_ecs" in self.name.name or \
@@ -27,8 +29,33 @@ class LifeCycleTest(Test):
             args.append("pre-stop")
         prep.vm_prepare(args)
 
+    def test_password_create_ecs(self):
+        self.log.info("Create ECS with password")
+        self.vm_test01.create(self.vm_params, authentication="password")
+        self.vm_test01.wait_for_created()
+        self.vm_test01.allocate_public_address()
+        self.assertIsNotNone(self.vm_test01.get_public_address(),
+                             "Fail to allocate public ip address")
+
+    def test_passowrd_start_ecs(self):
+        self.log.info("Start ECS")
+        self.vm_test01.start()
+        self.vm_test01.wait_for_running()
+        self.assertTrue(self.vm_test01.wait_for_login(authentication="password"),
+                        "Fail to ssh login")
+
+    def test_reset_password_ecs(self):
+        self.log.info("Reset password for ECS")
+        self.vm_test01.reset_password(new_password="Redhat123$")
+        self.vm_test01.password="Redhat123$"
+        self.vm_params["Password"]="Redhat123$"
+        self.vm_test01.restart()
+        self.vm_test01.wait_for_running()
+        self.assertTrue(self.vm_test01.wait_for_login(authentication="password"),
+                        "Fail to ssh login")
+
     def test_create_ecs(self):
-        self.log.info("Create ECS")
+        self.log.info("Create ECS with keypair")
         self.vm_test01.create(self.vm_params)
         self.vm_test01.wait_for_created()
         self.vm_test01.allocate_public_address()
@@ -72,7 +99,9 @@ class LifeCycleTest(Test):
         """
         self.log.info("Restart ECS")
         self.log.info("1. Restart ECS")
+        self.vm_test01.wait_for_login()
         before = self.vm_test01.get_output("who -b")
+        time.sleep(60)
         self.vm_test01.restart()
         self.vm_test01.wait_for_running()
         self.vm_test01.wait_for_login()
@@ -81,6 +110,7 @@ class LifeCycleTest(Test):
                             "Restart error: ECS is not restarted")
         self.log.info("2. Force restart ECS")
         before = after
+        time.sleep(60)
         self.vm_test01.restart(force=True)
         self.vm_test01.wait_for_running()
         self.vm_test01.wait_for_login()
@@ -90,11 +120,12 @@ class LifeCycleTest(Test):
 
     def test_reboot_inside_vm(self):
         self.log.info("Reboot inside VM")
+        self.vm_test01.wait_for_login()
         before = self.vm_test01.get_output("who -b")
-        self.vm_test01.get_output("reboot")
-        time.sleep(30)
-        self.assertTrue(self.vm_test01.wait_for_login(),
-                        "Fail to access to VM")
+        self.vm_test01.send_line("reboot")
+        time.sleep(60)
+        self.vm_test01.wait_for_running()
+        self.vm_test01.wait_for_login()
         after = self.vm_test01.get_output("who -b")
         self.assertNotEqual(before, after,
                             "Restart error: ECS is not restarted")

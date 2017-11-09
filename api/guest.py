@@ -20,7 +20,7 @@ class GuestUtils(object):
         self.params = params
         self.session = None
         self.username = self.params.get("username")
-        self.password = self.params.get("password")
+        self.password = self.params.get("Password")
 
     @property
     def name(self):
@@ -165,6 +165,9 @@ class GuestUtils(object):
                 raise
         logging.info(output)
         return output
+
+    def send_line(self, cmd=""):
+        self.session.sendline(cmd)
 
     def modify_value(self, key, value, conf_file, sepr='='):
         """

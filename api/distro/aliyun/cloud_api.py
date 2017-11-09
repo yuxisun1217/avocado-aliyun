@@ -116,7 +116,7 @@ class VM(Base, GuestUtils):
         logging.info("List VMs")
         return sdk.describe_instances(params)
 
-    def create(self, params):
+    def create(self, params, authentication="publickey"):
         """
         This helps to create a VM
         """
@@ -126,7 +126,7 @@ class VM(Base, GuestUtils):
         params.setdefault("SystemDiskCategory", "cloud_efficiency")
         params.setdefault("InternetMaxBandwidthIn", "5")
         params.setdefault("InternetMaxBandwidthOut", "5")
-        response = sdk.create_instance(params)
+        response = sdk.create_instance(params, authentication=authentication)
         time.sleep(10)
         return response
 
@@ -173,6 +173,43 @@ class VM(Base, GuestUtils):
             self.stop()
             self.wait_for_stopped()
         return sdk.delete_instance(params)
+
+    def reset_password(self, new_password):
+        logging.info("Reset password for VM")
+        params = {}
+        params.setdefault("InstanceId", self.id)
+        params.setdefault("Password", new_password)
+        return sdk.modify_instance_attribute(params)
+
+    def create_disk(self, params):
+        logging.info("Create cloud disk")
+        params.setdefault("DiskName", "avocado_autotest")
+        params.setdefault("DiskCategory", "cloud_ssd")
+        params.setdefault("Size", "20")
+        return sdk.create_disk(params)
+
+    def describe_disks(self, params, diskid=None):
+        logging.info("Describe cloud disks")
+        params.setdefault("DiskName", "avocado_autotest")
+        params.setdefault("Category", "cloud_ssd")
+        params.setdefault("PageSize", "100")
+        if diskid:
+            params["DiskIds"]=diskid
+        return sdk.describe_disks(params, diskid=diskid)
+
+    def attach_disk(self, diskid=None):
+        logging.info("Attach cloud disk to VM")
+        params = {}
+        params.setdefault("InstanceId", self.id)
+        params.setdefault("DiskId", diskid)
+        return sdk.attach_disk(params)
+
+    def detach_disk(self, diskid=None):
+        logging.info("Detach cloud disk to VM")
+        params = {}
+        params.setdefault("InstanceId", self.id)
+        params.setdefault("DiskId", diskid)
+        return sdk.detach_disk(params)
 
     def show(self):
         logging.info("Show VM params")
@@ -294,7 +331,11 @@ class VM(Base, GuestUtils):
         Get VM public ip address
         :return: public ip if have. Else, return None
         """
-        public_ip_list = self.params["PublicIpAddress"]["IpAddress"]
+        res = sdk.describe_instance_attribute(self.params)
+        if "PublicIpAddress" in res and "IpAddress" in res["PublicIpAddress"]:
+            public_ip_list = res["PublicIpAddress"]["IpAddress"]
+        else:
+            return None
         if public_ip_list:
             return public_ip_list[0]
         else:

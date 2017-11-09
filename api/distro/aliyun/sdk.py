@@ -80,7 +80,7 @@ def describe_instances(params=None):
     return _send_request(request)
 
 
-def create_instance(params):
+def create_instance(params, authentication="publickey"):
     request = CreateInstanceRequest()
     key_list = ["InstanceChargeType",
                 "ImageId",
@@ -88,7 +88,6 @@ def create_instance(params):
                 "InternetChargeType",
                 "SecurityGroupId",
                 "VSwitchId",
-                "KeyPairName",
                 "SystemDiskCategory",
                 "HostName",
                 "InstanceName",
@@ -96,6 +95,10 @@ def create_instance(params):
                 "InternetMaxBandwidthIn",
                 "RegionId",
                 "ZoneId"]
+    if authentication == "publickey":
+        key_list.append("KeyPairName")
+    elif authentication == "password":
+        key_list.append("Password")
     request = _add_params(request, key_list, params)
     return _send_request(request)
 
@@ -133,6 +136,14 @@ def delete_instance(params):
 def describe_instance_attribute(params):
     request = DescribeInstanceAttributeRequest()
     key_list = ["InstanceId"]
+    request = _add_params(request, key_list, params)
+    return _send_request(request)
+
+
+def modify_instance_attribute(params):
+    request = ModifyInstanceAttributeRequest()
+    key_list = ["InstanceId",
+                "Password"]
     request = _add_params(request, key_list, params)
     return _send_request(request)
 
@@ -203,5 +214,45 @@ def create_image(params):
     key_list = ["ImageName",
                 "SnaoshotId",
                 "Platform"]
+    request = _add_params(request, key_list, params)
+    return _send_request(request)
+
+
+def describe_disks(params, diskid=None):
+    request = DescribeDisksRequest()
+    key_list = ["RegionId",
+                "ZoneId",
+                "DiskName",
+                "Category",
+                "PageSize"]
+    if diskid:
+        key_list.append("DiskIds")
+    request = _add_params(request, key_list, params)
+    return _send_request(request)
+
+
+def create_disk(params):
+    request = CreateDiskRequest()
+    key_list = ["RegionId",
+                "ZoneId",
+                "DiskName",
+                "DiskCategory",
+                "Size"]
+    request = _add_params(request, key_list, params)
+    return _send_request(request)
+
+
+def attach_disk(params):
+    request = AttachDiskRequest()
+    key_list = ["InstanceId",
+                "DiskId"]
+    request = _add_params(request, key_list, params)
+    return _send_request(request)
+
+
+def detach_disk(params):
+    request = DetachDiskRequest()
+    key_list = ["InstanceId",
+                "DiskId"]
     request = _add_params(request, key_list, params)
     return _send_request(request)

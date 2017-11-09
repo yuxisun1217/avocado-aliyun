@@ -31,7 +31,9 @@ VMUser:
     password: %(vm_password)s
     keypairname: %(keypairname)s
 Region:
-    id: cn-beijing
+    id: %(region_id)s
+Zone:
+    id: %(zone_id)s
 OSDisk:
     name: %(osdisk_name)s
     local_path: %(osdisk_local_path)s
@@ -115,13 +117,13 @@ class CreateConfFiles(object):
         # Set distro specified parameters
         cloud = Distro()
         if self.distro == "aliyun":
-            cloud.size = "ecs.n1.tiny"
+            cloud.size = "ecs.sn1.medium"
             aliyun_sub_params = {
                 "aliyun_access_key_id": self.account_data.get("AliyunSub").get("aliyun_access_key_id"),
                 "aliyun_access_key_secret": self.account_data.get("AliyunSub").get("aliyun_access_key_secret")
             }
             cloud.sub = AliyunSub % aliyun_sub_params
-            cloud.params = {"keypairname": "aliautokey",
+            cloud.params = {"keypairname": "wshi",
                             "vm_username": "root",
                             "vm_name_prefix": "aliauto"}
         else:
@@ -136,6 +138,8 @@ class CreateConfFiles(object):
             "redhat_password": self.account_data.get("RedhatSub").get("password"),
             "vm_username": self.account_data.get("VMUser").get("username", ""),
             "vm_password": self.account_data.get("VMUser").get("password", ""),
+            "region_id": self.data.get("Region").get("id", ""),
+            "zone_id": self.data.get("Zone").get("id", ""),
             "osdisk_name": self.data.get("OSDisk", {}).get("name", ""),
             "osdisk_local_path": self.data.get("OSDisk", {}).get("local_path", "/home/autotest/osdisk/{0}".format(self.distro)),
             "vm_name_postfix": str(self.data.get("project")).replace('.', ''),
