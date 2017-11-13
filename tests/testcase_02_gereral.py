@@ -150,6 +150,22 @@ YlUJiCvEei7xX/qSPtyti68=
             self.assertIn(module, output,
                           "%s module doesn't exist" % module)
 
+    def test_files_controlled_by_rpm(self):
+        self.log.info("Check all files on the disk is controlled by rpm packages")
+        utils_script = "tools/rogue.sh"
+        if int(self.project) == 7:
+            utils_data = "tools/rogue.el7.lst"
+        elif int(self.project) == 6:
+            utils_data = "tools/rogue.el6.lst"
+        else:
+            self.fail("Project name is unknown: %s" % self.project)
+        self.vm_test01.copy_files_to(utils_script, "/tmp/")
+        self.vm_test01.copy_files_to(utils_data, "/tmp/")
+        self.vm_test01.get_output("chmod 755 /tmp/rogue.sh && /tmp/rogue.sh")
+        output = self.vm_test01.get_output("cat /tmp/rogue | grep -vxFf /tmp/rogue.el7.lst")
+        self.assertEqual("", output,
+                         "Found extra files not controlled by rpm: %s" % output)
+
     def test_validation(self):
         self.log.info("Validation test")
         region_list = ["us-west-1"]
