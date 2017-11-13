@@ -42,7 +42,7 @@ class Setup(object):
             raise ValueError("No such distro: {0}".format(self.distro))
 
     def _get_vm_params_aliyun(self, **kwargs):
-        self.vm_params["InstanceType"] = self.params.get('instance_type', '*/VM/*')
+        self.vm_params["InstanceType"] = self.params.get('name', '*/instance_type/*')
         self.vm_params["region"] = self.params.get('id', "*/Region/*")
         vmname_tag = kwargs.get("vmname_tag", "").replace("_", "")
         self.vm_params["InstanceName"] = self.params.get('name', '*/VM/*') + \
