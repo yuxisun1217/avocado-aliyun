@@ -3,10 +3,6 @@ instance_type: !mux
         name: ecs.sn1.medium
         cpu: 2
         memory: 4
-    ecs.sn2.medium:
-        name: ecs.sn2.medium
-        cpu: 2
-        memory: 8
     ecs.sn1.large:
         name: ecs.sn1.large
         cpu: 4
@@ -23,6 +19,10 @@ instance_type: !mux
         name: ecs.sn1.7xlarge
         cpu: 32
         memory: 64
+    ecs.sn2.medium:
+        name: ecs.sn2.medium
+        cpu: 2
+        memory: 8
     ecs.sn2.large:
         name: ecs.sn2.large
         cpu: 4
@@ -43,82 +43,6 @@ instance_type: !mux
         name: ecs.sn2.13xlarge
         cpu: 56
         memory: 224
-    ecs.se1.large:
-        name: ecs.se1.large
-        cpu: 2
-        memory: 16
-    ecs.se1.xlarge:
-        name: ecs.se1.xlarge
-        cpu: 4
-        memory: 32
-    ecs.se1.2xlarge:
-        name: ecs.se1.2xlarge
-        cpu: 8
-        memory: 64
-    ecs.se1.4xlarge:
-        name: ecs.se1.4xlarge
-        cpu: 16
-        memory: 128
-    ecs.se1.8xlarge:
-        name: ecs.se1.8xlarge
-        cpu: 32
-        memory: 256
-    ecs.se1.14xlarge:
-        name: ecs.se1.14xlarge
-        cpu: 56
-        memory: 480
-    ecs.i1.xlarge:
-        name: ecs.i1.xlarge
-        cpu: 4
-        memory: 16
-    ecs.i1.2xlarge:
-        name: ecs.i1.2xlarge
-        cpu: 8
-        memory: 32
-    ecs.i1.4xlarge:
-        name: ecs.i1.4xlarge
-        cpu: 16
-        memory: 64
-    ecs.i1.8xlarge:
-        name: ecs.i1.8xlarge
-        cpu: 32
-        memory: 128
-    ecs.i1.14xlarge:
-        name: ecs.i1.14xlarge
-        cpu: 56
-        memory: 224
-    ecs.cm4.xlarge:
-        name: ecs.cm4.xlarge
-        cpu: 4
-        memory: 16
-    ecs.cm4.2xlarge:
-        name: ecs.cm4.2xlarge
-        cpu: 8
-        memory: 32
-    ecs.cm4.4xlarge:
-        name: ecs.cm4.4xlarge
-        cpu: 16
-        memory: 64
-    ecs.ce4.xlarge:
-        name: ecs.ce4.xlarge
-        cpu: 4
-        memory: 32
-    ecs.c4.xlarge:
-        name: ecs.c4.xlarge
-        cpu: 4
-        memory: 8
-    ecs.c4.2xlarge:
-        name: ecs.c4.2xlarge
-        cpu: 8
-        memory: 16
-    ecs.c4.4xlarge:
-        name: ecs.c4.4xlarge
-        cpu: 16
-        memory: 32
-    ecs.cm4.6xlarge:
-        name: ecs.cm4.6xlarge
-        cpu: 24
-        memory: 96
     ecs.d1.2xlarge:
         name: ecs.d1.2xlarge
         cpu: 8
@@ -207,14 +131,30 @@ instance_type: !mux
         name: ecs.se1ne.14xlarge
         cpu: 56
         memory: 480
-    ecs.i1-c10d1.8xlarge:
-        name: ecs.i1-c10d1.8xlarge
-        cpu: 32
-        memory: 128
-    ecs.i1-c5d1.4xlarge:
-        name: ecs.i1-c5d1.4xlarge
-        cpu: 16
+    ecs.se1.large:
+        name: ecs.se1.large
+        cpu: 2
+        memory: 16
+    ecs.se1.xlarge:
+        name: ecs.se1.xlarge
+        cpu: 4
+        memory: 32
+    ecs.se1.2xlarge:
+        name: ecs.se1.2xlarge
+        cpu: 8
         memory: 64
+    ecs.se1.4xlarge:
+        name: ecs.se1.4xlarge
+        cpu: 16
+        memory: 128
+    ecs.se1.8xlarge:
+        name: ecs.se1.8xlarge
+        cpu: 32
+        memory: 256
+    ecs.se1.14xlarge:
+        name: ecs.se1.14xlarge
+        cpu: 56
+        memory: 480
     ecs.d1ne.2xlarge:
         name: ecs.d1ne.2xlarge
         cpu: 8
@@ -243,6 +183,154 @@ instance_type: !mux
         name: ecs.d1-c14d3.14xlarge
         cpu: 56
         memory: 160
+    ecs.i1.xlarge:
+        name: ecs.i1.xlarge
+        cpu: 4
+        memory: 16
+        disk_count: 2
+        disk_size: 104
+        disk_type: ssd
+    ecs.i1.2xlarge:
+        name: ecs.i1.2xlarge
+        cpu: 8
+        memory: 32
+        disk_count: 2
+        disk_size: 208
+        disk_type: ssd
+    ecs.i1.4xlarge:
+        name: ecs.i1.4xlarge
+        cpu: 16
+        memory: 64
+        disk_count: 2
+        disk_size: 416
+        disk_type: ssd
+    ecs.i1.8xlarge:
+        name: ecs.i1.8xlarge
+        cpu: 32
+        memory: 128
+        disk_count: 2
+        disk_size: 832
+        disk_type: ssd
+    ecs.i1.14xlarge:
+        name: ecs.i1.14xlarge
+        cpu: 56
+        memory: 224
+        disk_count: 2
+        disk_size: 1456
+        disk_type: ssd
+    ecs.i1-c5d1.4xlarge:
+        name: ecs.i1-c5d1.4xlarge
+        cpu: 16
+        memory: 64
+        disk_count: 2
+        disk_size: 1456
+        disk_type: ssd
+    ecs.i1-c10d1.8xlarge:
+        name: ecs.i1-c10d1.8xlarge
+        cpu: 32
+        memory: 128
+        disk_count: 2
+        disk_size: 1456
+        disk_type: ssd
+    ecs.cm4.xlarge:
+        name: ecs.cm4.xlarge
+        cpu: 4
+        memory: 16
+    ecs.cm4.2xlarge:
+        name: ecs.cm4.2xlarge
+        cpu: 8
+        memory: 32
+    ecs.cm4.4xlarge:
+        name: ecs.cm4.4xlarge
+        cpu: 16
+        memory: 64
+    ecs.cm4.6xlarge:
+        name: ecs.cm4.6xlarge
+        cpu: 24
+        memory: 96
+    ecs.ce4.xlarge:
+        name: ecs.ce4.xlarge
+        cpu: 4
+        memory: 32
+    ecs.c4.xlarge:
+        name: ecs.c4.xlarge
+        cpu: 4
+        memory: 8
+    ecs.c4.2xlarge:
+        name: ecs.c4.2xlarge
+        cpu: 8
+        memory: 16
+    ecs.c4.4xlarge:
+        name: ecs.c4.4xlarge
+        cpu: 16
+        memory: 32
+    ecs.re4.20xlarge:
+        name: ecs.re4.20xlarge
+        cpu: 80
+        memory: 992
+    ecs.re4.40xlarge:
+        name: ecs.re4.40xlarge
+        cpu: 160
+        memory: 1984
+    ecs.hfg5.xlarge:
+        name: ecs.hfg5.xlarge
+        cpu: 4
+        memory: 16
+    ecs.hfg5.2xlarge:
+        name: ecs.hfg5.2xlarge
+        cpu: 8
+        memory: 32
+    ecs.hfg5.4xlarge:
+        name: ecs.hfg5.4xlarge
+        cpu: 16
+        memory: 64
+    ecs.hfg5.6xlarge:
+        name: ecs.hfg5.6xlarge
+        cpu: 24
+        memory: 96
+    ecs.hfg5.8xlarge:
+        name: ecs.hfg5.8xlarge
+        cpu: 32
+        memory: 128
+    ecs.hfg5.14xlarge:
+        name: ecs.hfg5.14xlarge
+        cpu: 56
+        memory: 160
+    ecs.i2.xlarge:
+        name: ecs.i2.xlarge
+        cpu: 4
+        memory: 32
+        disk_count: 2
+        disk_size: 894
+        disk_type: ssd
+    ecs.i2.2xlarge:
+        name: ecs.i2.2xlarge
+        cpu: 8
+        memory: 64
+        disk_count: 2
+        disk_size: 1788
+        disk_type: ssd
+    ecs.i2.4xlarge:
+        name: ecs.i2.4xlarge
+        cpu: 16
+        memory: 128
+        disk_count: 2
+        disk_size: 1788
+        disk_type: ssd
+    ecs.i2.8xlarge:
+        name: ecs.i2.8xlarge
+        cpu: 32
+        memory: 256
+        disk_count: 2
+        disk_size: 1788
+        disk_type: ssd
+    ecs.i2.16xlarge:
+        name: ecs.i2.16xlarge
+        cpu: 64
+        memory: 512
+        disk_count: 2
+        disk_size: 1788
+        disk_type: ssd
     ecs.c5.large:
         name: ecs.c5.large
         cpu: 2
@@ -271,6 +359,14 @@ instance_type: !mux
         name: ecs.c5.16xlarge
         cpu: 64
         memory: 128
+    ecs.sccg5.24xlarge:
+        name: ecs.sccg5.24xlarge
+        cpu: 96
+        memory: 384
+    ecs.scch5.16xlarge:
+        name: ecs.scch5.16xlarge
+        cpu: 64
+        memory: 192
     ecs.g5.large:
         name: ecs.g5.large
         cpu: 2
@@ -355,58 +451,6 @@ instance_type: !mux
         name: ecs.hfc5.8xlarge
         cpu: 32
         memory: 64
-    ecs.hfg5.xlarge:
-        name: ecs.hfg5.xlarge
-        cpu: 4
-        memory: 16
-    ecs.hfg5.2xlarge:
-        name: ecs.hfg5.2xlarge
-        cpu: 8
-        memory: 32
-    ecs.hfg5.4xlarge:
-        name: ecs.hfg5.4xlarge
-        cpu: 16
-        memory: 64
-    ecs.hfg5.6xlarge:
-        name: ecs.hfg5.6xlarge
-        cpu: 24
-        memory: 96
-    ecs.hfg5.8xlarge:
-        name: ecs.hfg5.8xlarge
-        cpu: 32
-        memory: 128
-    ecs.hfg5.14xlarge:
-        name: ecs.hfg5.14xlarge
-        cpu: 56
-        memory: 160
-    ecs.i2.xlarge:
-        name: ecs.i2.xlarge
-        cpu: 4
-        memory: 32
-    ecs.i2.2xlarge:
-        name: ecs.i2.2xlarge
-        cpu: 8
-        memory: 64
-    ecs.i2.4xlarge:
-        name: ecs.i2.4xlarge
-        cpu: 16
-        memory: 128
-    ecs.i2.8xlarge:
-        name: ecs.i2.8xlarge
-        cpu: 32
-        memory: 256
-    ecs.i2.16xlarge:
-        name: ecs.i2.16xlarge
-        cpu: 64
-        memory: 512
-    ecs.re4.20xlarge:
-        name: ecs.re4.20xlarge
-        cpu: 80
-        memory: 992
-    ecs.re4.40xlarge:
-        name: ecs.re4.40xlarge
-        cpu: 160
-        memory: 1984
     ecs.t5-c1m1.large:
         name: ecs.t5-c1m1.large
         cpu: 2
@@ -463,11 +507,3 @@ instance_type: !mux
         name: ecs.t5-lc1m4.large
         cpu: 2
         memory: 8
-    ecs.sccg5.24xlarge:
-        name: ecs.sccg5.24xlarge
-        cpu: 96
-        memory: 384
-    ecs.scch5.16xlarge:
-        name: ecs.scch5.16xlarge
-        cpu: 64
-        memory: 192

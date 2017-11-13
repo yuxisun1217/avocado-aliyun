@@ -146,26 +146,44 @@ instance_type: !mux
         name: ecs.i1.2xlarge
         cpu: 8
         memory: 32
+        disk_count: 2
+        disk_size: 208
+        disk_type: ssd
     ecs.i1.4xlarge:
         name: ecs.i1.4xlarge
         cpu: 16
         memory: 64
+        disk_count: 2
+        disk_size: 416
+        disk_type: ssd
     ecs.i1.8xlarge:
         name: ecs.i1.8xlarge
         cpu: 32
         memory: 128
+        disk_count: 2
+        disk_size: 832
+        disk_type: ssd
     ecs.i1.14xlarge:
         name: ecs.i1.14xlarge
         cpu: 56
         memory: 224
+        disk_count: 2
+        disk_size: 1456
+        disk_type: ssd
     ecs.i1-c5d1.4xlarge:
         name: ecs.i1-c5d1.4xlarge
         cpu: 16
         memory: 64
+        disk_count: 2
+        disk_size: 1456
+        disk_type: ssd
     ecs.i1-c10d1.8xlarge:
         name: ecs.i1-c10d1.8xlarge
         cpu: 32
         memory: 128
+        disk_count: 2
+        disk_size: 1456
+        disk_type: ssd
     ecs.cm4.xlarge:
         name: ecs.cm4.xlarge
         cpu: 4
