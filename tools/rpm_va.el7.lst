@@ -1,0 +1,11 @@
+S.5....T.  c /etc/sysctl.conf
+missing     /var/run/wpa_supplicant
+....L....  c /etc/pam.d/fingerprint-auth
+....L....  c /etc/pam.d/password-auth
+....L....  c /etc/pam.d/postlogin
+....L....  c /etc/pam.d/smartcard-auth
+....L....  c /etc/pam.d/system-auth
+S.5....T.  c /etc/cloud/cloud.cfg
+S.5....T.  c /etc/sysconfig/authconfig
+S.5....T.  c /etc/yum/pluginconf.d/langpacks.conf
+S.5....T.  c /etc/ssh/sshd_config

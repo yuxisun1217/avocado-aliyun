@@ -168,6 +168,47 @@ YlUJiCvEei7xX/qSPtyti68=
         self.assertEqual("", output,
                          "Found extra files not controlled by rpm: %s" % output)
 
+    def test_file_content_integrity(self):
+        self.log.info("Check file content integrity by rpm -Va")
+        src_dir = "tools/"
+        dest_dir = "/tmp/"
+        if int(self.project) == 7:
+            utils_data = "rpm_va.el7.lst"
+        elif int(self.project) == 6:
+            utils_data = "rpm_va.el6.lst"
+        else:
+            self.fail("Project name is unknown: %s" % self.project)
+        self.vm_test01.copy_files_to(src_dir+utils_data, dest_dir)
+        output = self.vm_test01.get_output("rpm -Va | grep -vxFf %s" % dest_dir+utils_data)
+        self.assertEqual("", output,
+                         "Found extra files has been modified: %s" % output)
+        utils_data = "cloud.cfg"
+        self.vm_test01.copy_files_to(src_dir + utils_data, dest_dir)
+        output = self.vm_test01.get_output("diff -wB -I '[[:space:]]*' /etc/cloud/cloud.cfg %s" % dest_dir + utils_data)
+        self.assertEqual("", output,
+                         "Found %s has been modified: %s" % (utils_data, output))
+        if int(self.project) == 7:
+            utils_data = "sshd_config.el7"
+        elif int(self.project) == 6:
+            utils_data = "sshd_config.el6"
+        else:
+            self.fail("Project name is unknown: %s" % self.project)
+        self.vm_test01.copy_files_to(src_dir + utils_data, dest_dir)
+        output = self.vm_test01.get_output("diff -wB -I '[[:space:]]*|PasswordAuthentication' /etc/ssh/sshd_config %s"
+                                           % dest_dir + utils_data)
+        self.assertEqual("", output,
+                         "Found %s has been modified: %s" % (utils_data, output))
+        if int(self.project) == 7:
+            utils_data = "sysctl.el7.conf"
+        elif int(self.project) == 6:
+            utils_data = "sysctl.el6.conf"
+        else:
+            self.fail("Project name is unknown: %s" % self.project)
+        self.vm_test01.copy_files_to(src_dir + utils_data, dest_dir)
+        output = self.vm_test01.get_output("diff -wB -I '[[:space:]]*' /etc/sysctl.conf %s" % dest_dir + utils_data)
+        self.assertEqual("", output,
+                         "Found %s has been modified: %s" % (utils_data, output))
+
     def test_validation(self):
         self.log.info("Validation test")
         region_list = ["us-west-1"]
