@@ -26,6 +26,7 @@ class CloudDiskTest(Test):
         prep.vm_prepare(args)
         prep.disk_prepare(disk_count=self.cloud_disk_limit)
 
+    # TODO: skip for ecs.i1/i2 series due to local disks will conflict with attach disks in dev_name
     def test_online_attach_cloud_disks(self):
         self.log.info("Online attach a cloud disk to VM")
         for disk_id in self.vm_params.get("AttachDiskIds"):

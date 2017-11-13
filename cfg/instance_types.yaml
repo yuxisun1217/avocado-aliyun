@@ -1,4 +1,4 @@
-instance_type:
+instance_type: !mux
     ecs.t1.xsmall:
         cpu: 1
         memory: 0.5
