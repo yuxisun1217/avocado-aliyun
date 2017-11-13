@@ -38,7 +38,7 @@ OSDisk:
     name: %(osdisk_name)s
     local_path: %(osdisk_local_path)s
 VM:
-    name: %(vm_name_prefix)s%(vm_name_postfix)s
+    name: %(vm_name_prefix)s
     instance_type: %(vm_size)s
 Image:
     name: %(image_name)s
@@ -142,7 +142,6 @@ class CreateConfFiles(object):
             "zone_id": self.data.get("Zone").get("id", ""),
             "osdisk_name": self.data.get("OSDisk", {}).get("name", ""),
             "osdisk_local_path": self.data.get("OSDisk", {}).get("local_path", "/home/autotest/osdisk/{0}".format(self.distro)),
-            "vm_name_postfix": str(self.data.get("project")).replace('.', ''),
             "vm_size": cloud.size,
             "image_name": self.data.get("Image").get("name", ""),
             "image_id": self.data.get("Image").get("id", ""),
