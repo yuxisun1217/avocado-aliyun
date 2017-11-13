@@ -152,17 +152,19 @@ YlUJiCvEei7xX/qSPtyti68=
 
     def test_files_controlled_by_rpm(self):
         self.log.info("Check all files on the disk is controlled by rpm packages")
-        utils_script = "tools/rogue.sh"
+        src_dir = "tools/"
+        dest_dir = "/tmp/"
+        utils_script = "rogue.sh"
         if int(self.project) == 7:
-            utils_data = "tools/rogue.el7.lst"
+            utils_data = "rogue.el7.lst"
         elif int(self.project) == 6:
-            utils_data = "tools/rogue.el6.lst"
+            utils_data = "rogue.el6.lst"
         else:
             self.fail("Project name is unknown: %s" % self.project)
-        self.vm_test01.copy_files_to(utils_script, "/tmp/")
-        self.vm_test01.copy_files_to(utils_data, "/tmp/")
-        self.vm_test01.get_output("chmod 755 /tmp/rogue.sh && /tmp/rogue.sh")
-        output = self.vm_test01.get_output("cat /tmp/rogue | grep -vxFf /tmp/rogue.el7.lst")
+        self.vm_test01.copy_files_to(src_dir+utils_script, dest_dir)
+        self.vm_test01.copy_files_to(src_dir+utils_data, dest_dir)
+        self.vm_test01.get_output("chmod 755 %s && %s" % (dest_dir+utils_script, dest_dir+utils_script))
+        output = self.vm_test01.get_output("cat %s | grep -vxFf %s" % (dest_dir+"rogue", dest_dir+utils_data))
         self.assertEqual("", output,
                          "Found extra files not controlled by rpm: %s" % output)
 
