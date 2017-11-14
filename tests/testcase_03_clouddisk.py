@@ -23,10 +23,13 @@ class CloudDiskTest(Test):
         args = []
         if "offline" in self.name.name:
             args.append("pre-stop")
+        if "ecs.i1" in self.vm_params["InstanceType"] or "ecs.i2" in self.vm_params["InstanceType"]:
+            self.disk_count = self.params.get('disk_count', '*/{0}/*'.format(instance_type))
+        else:
+            self.disk_count = 0
         prep.vm_prepare(args)
         prep.disk_prepare(disk_count=self.cloud_disk_limit)
 
-    # TODO: skip for ecs.i1/i2 series due to local disks will conflict with attach disks in dev_name
     def test_online_attach_cloud_disks(self):
         self.log.info("Online attach a cloud disk to VM")
         for disk_id in self.vm_params.get("AttachDiskIds"):
@@ -39,7 +42,7 @@ class CloudDiskTest(Test):
                 else:
                     time.sleep(1)
         for i in xrange(1, self.cloud_disk_limit + 1):
-            idx = chr(97+i)
+            idx = chr(97+self.disk_count+i)
             cmd = "fdisk -l /dev/vd%s | grep '/dev/vd%s' | cut -d ',' -f 1 | cut -d ' ' -f 4"
             output = self.vm_test01.get_output(cmd % (idx, idx))
             self.assertEqual(output, "GB",
@@ -71,7 +74,7 @@ class CloudDiskTest(Test):
                 else:
                     time.sleep(1)
         for i in xrange(1, self.cloud_disk_limit + 1):
-            idx = chr(97 + i)
+            idx = chr(97+self.disk_count+i)
             cmd = "fdisk -l | grep '/dev/vd%s'"
             output = self.vm_test01.get_output(cmd % idx)
             self.assertEqual(output, "",
@@ -93,7 +96,7 @@ class CloudDiskTest(Test):
         self.assertTrue(self.vm_test01.wait_for_login(),
                         "Fail to ssh login after offline attach disks")
         for i in xrange(1, self.cloud_disk_limit + 1):
-            idx = chr(97+i)
+            idx = chr(97+self.disk_count+i)
             cmd = "fdisk -l /dev/vd%s | grep '/dev/vd%s' | cut -d ',' -f 1 | cut -d ' ' -f 4"
             output = self.vm_test01.get_output(cmd % (idx, idx))
             self.assertEqual(output, "GB",
@@ -129,7 +132,7 @@ class CloudDiskTest(Test):
         self.assertTrue(self.vm_test01.wait_for_login(),
                         "Fail to ssh login after offline attach disks")
         for i in xrange(1, self.cloud_disk_limit + 1):
-            idx = chr(97 + i)
+            idx = chr(97+self.disk_count+i)
             cmd = "fdisk -l | grep '/dev/vd%s'"
             output = self.vm_test01.get_output(cmd % idx)
             self.assertEqual(output, "",
