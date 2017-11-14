@@ -161,8 +161,8 @@ class GuestUtils(object):
             if ignore_status:
                 return None
             else:
-                logging.info("After retry %d times, run command %s timeout" % (max_retry, cmd))
-                raise
+#                logging.info("After retry %d times, run command %s timeout" % (max_retry, cmd))
+                raise Exception("After retry %d times, run command %s timeout" % (max_retry, cmd))
         logging.info(output)
         return output
 
@@ -279,7 +279,7 @@ class GuestUtils(object):
             username = self.username
         if password is None:
             password = self.password
-        client = self.params.get("file_transfer_client")
+        client = self.params.get("file_transfer_client", "scp")
         address = self.get_public_address()
         port = self.get_ssh_port()
         log_filename = ("transfer-%s-from-%s-%s.log" %

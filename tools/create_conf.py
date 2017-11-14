@@ -139,7 +139,7 @@ class CreateConfFiles(object):
             "vm_username": self.account_data.get("VMUser").get("username", ""),
             "vm_password": self.account_data.get("VMUser").get("password", ""),
             "region_id": self.data.get("Region").get("id", ""),
-            "zone_id": self.data.get("Zone").get("id", ""),
+            "zone_id": self.data.get("Zone").get("id", "") if self.data.get("Zone") else "",
             "osdisk_name": self.data.get("OSDisk", {}).get("name", ""),
             "osdisk_local_path": self.data.get("OSDisk", {}).get("local_path", "/home/autotest/osdisk/{0}".format(self.distro)),
             "vm_size": cloud.size,

@@ -9,6 +9,7 @@ REALPATH = os.path.split(os.path.realpath(__file__))[0]
 sys.path.append(os.path.join(os.path.dirname(REALPATH)))
 
 from api.setup import Setup
+from utils import utils_misc
 
 
 class GeneralTest(Test):
@@ -19,8 +20,6 @@ class GeneralTest(Test):
         self.project = prep.project
         self.vm_test01 = prep.vm_test01
         self.vm_params = prep.vm_params
-        if "validation" in self.name.name:
-            return
         args = []
         if "create_ecs" in self.name.name:
             args.append("pre-delete")
@@ -231,38 +230,34 @@ YlUJiCvEei7xX/qSPtyti68=
 
     def test_validation(self):
         self.log.info("Validation test")
-        region_list = ["us-west-1"]
-        instance_type_list = ["ecs.n1.tiny",
-                              "ecs.xn4.small"]
-        error_msg = ""
-        for region in region_list:
-            self.vm_test01["RegionId"] = region
-            # Create and start instances
-            for instance_type in instance_type_list:
-                self.vm_test01["InstanceType"] = instance_type
-                self.vm_params["InstanceName"] = self.params.get('name', '*/VM/*') + \
-                                                str(self.project).replace('.', '') + \
-                                                self.vm_params["InstanceType"][4:].lower().replace(".", "")
-                self.log.info("Creating ECS. Region:{0}, Instance type:{1}".format(region, instance_type))
-                self.vm_test01.create(self.vm_params)
-                self.vm_test01.wait_for_created()
-                self.vm_test01.allocate_public_address()
-                self.vm_test01.start()
-            # Login instnaces and check
-            for instance_type in instance_type_list:
-                self.vm_test01.wait_for_running()
-                if not self.vm_test01.wait_for_login():
-                    tmp_msg = "Fail to login. Region:{0}, Instance type:{1}".format(region, instance_type)
-                    self.log.error(tmp_msg)
-                    error_msg += tmp_msg + '\n'
-                    continue
-                std_cpu = self.params.get('cpu', '*/{0}/*'.format(instance_type))
-                real_cpu = self.vm_test01.get_output("grep processor /proc/cpuinfo|wc -l")
-                if int(real_cpu) != int(std_cpu):
-                    error_msg += "CPU number is wrong. Region:{0}, Instance type:{1}, "\
-                                 "Standard:{2}, Real:{3}\n".format(region, instance_type, std_cpu, real_cpu)
-        if error_msg != "":
-            self.fail("Validation test failed. Error messages:\n"+error_msg)
+        # Login instnace, get CPU, memory, cpu flags, boot time. Save these data and copy to host 
+        guest_path = "/root"
+        inst_type = self.vm_params.get('InstanceType')[4:].lower().replace('.', '')
+        region = self.vm_params.get('region').replace('-', '')
+        guest_logpath = "/root/workspace/log"
+        host_logpath = os.path.dirname(self.job.logfile) + "/validation_data"
+        self.vm_test01.copy_files_to(host_path="{0}/../tools/test_validation_*.sh".format(REALPATH),
+                                     guest_path=guest_path)
+        self.log.info("Region: {0}  InstanceType: {1}".format(region, inst_type))
+        # Cleanup $HOME/workspace/log
+        self.vm_test01.get_output("rm -rf {0}".format(guest_logpath))
+        # Collect cpu/memory/cpu flags
+        self.vm_test01.get_output("bash {0}/test_validation_resource_information.sh {1}".format(guest_path, region+'_'+inst_type))
+        # Collect bootup time after created
+        self.vm_test01.get_output("bash {0}/test_validation_boot_time.sh {1} create".format(guest_path, region+'_'+inst_type))
+        # Reboot VM and then collect bootup time after rebooting
+        self.log.debug("Sending command: reboot")
+        self.vm_test01.send_line("reboot")
+        self.vm_test01.session_close()
+        time.sleep(10)
+        self.vm_test01.wait_for_login()
+        self.vm_test01.get_output("bash {0}/test_validation_boot_time.sh {1} reboot".format(guest_path, region+'_'+inst_type))
+        # Copy logs to host
+        utils_misc.command("mkdir -p "+host_logpath)
+        self.log.debug("Copying logs to host...")
+        self.vm_test01.copy_files_from(host_path=host_logpath,
+                                       guest_path="{0}/*.log".format(guest_logpath))
+        self.log.info("Copy logs to {0} successfully.".format(host_logpath))
 
 
     def tearDown(self):
