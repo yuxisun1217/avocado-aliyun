@@ -109,11 +109,31 @@ YlUJiCvEei7xX/qSPtyti68=
         self.log.info("Check the virt-what")
         self.assertEqual(self.vm_test01.get_output("virt-what"), "kvm", "virt-what result is not kvm")
 
-    def test_check_selinux(self):
+    def test_check_selinux_status(self):
         self.log.info("Check SELinux status")
         self.assertEqual(self.vm_test01.get_output("getenforce"), "Enforcing", "SELinux is not enforcing")
         cmd = "cat /etc/selinux/config|grep -v '^[[:space:]]*#'|grep 'SELINUX='|cut -d '=' -f 2"
         self.assertEqual(self.vm_test01.get_output(cmd), "enforcing", "SELinux is not enforcing")
+
+    def test_check_selinux_contexts(self):
+        self.log.info("Check all files confiled by SELinux has the correct contexts")
+        src_dir = "tools/"
+        dest_dir = "/tmp/"
+        if int(self.project) == 7:
+            utils_data = "selinux.el7.lst"
+        elif int(self.project) == 6:
+            utils_data = "selinux.el6.lst"
+        else:
+            self.fail("Project name is unknown: %s" % self.project)
+        self.vm_test01.copy_files_to(src_dir+utils_data, dest_dir)
+        cmd = "restorecon -R -v -n / -e /mnt -e /proc -e /sys -e /tmp -e /var/tmp -e /run > /tmp/selinux.now"
+        self.vm_test01.get_output(cmd)
+        # This line is a workaround for RHEL6 system for not generating the initial command prompt line
+        self.vm_test01.get_output("true")
+        output = self.vm_test01.get_output("diff -wB /tmp/selinux.now %s" % dest_dir+utils_data)
+        self.assertEqual("", output,
+                         "Found extra SELinux contexts have been modified: %s" % output)
+
 
     def test_check_hostname(self):
         self.log.info("Check the hostname")

@@ -9,7 +9,8 @@ cases:
     testcase_01_lifecycle.py:LifeCycleTest.test_reboot_inside_vm
     testcase_02_gereral.py:GeneralTest.test_verify_package_signed
     testcase_02_gereral.py:GeneralTest.test_check_virt_what
-    testcase_02_gereral.py:GeneralTest.test_check_selinux
+    testcase_02_gereral.py:GeneralTest.test_check_selinux_status
+    testcase_02_gereral.py:GeneralTest.test_check_selinux_contexts
     testcase_02_gereral.py:GeneralTest.test_check_hostname
     testcase_02_gereral.py:GeneralTest.test_check_release_version
     testcase_02_gereral.py:GeneralTest.test_check_product_certificate
