@@ -71,7 +71,7 @@ DataDisk:
 TestYaml = """\
 test:
     !include : common.yaml
-    !include : instance_types.yaml
+    !include : instance_types_%(region)s.yaml
     !include : cases_%(case_group)s.yaml
 """
 
@@ -166,6 +166,7 @@ class CreateConfFiles(object):
         test_yaml = "{0}/cfg/test.yaml".format(ROOT_PATH)
         test_yaml_dict = {
             "case_group": self.data.get("case_group", "function"),
+            "region": self.data.get("Region").get("id", "us-west-1").replace('-', '')
         }
         _write_file_content(test_yaml,
                             TestYaml % test_yaml_dict)
