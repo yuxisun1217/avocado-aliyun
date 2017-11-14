@@ -1,13 +1,12 @@
 cases:
     LifeCycleTest.test_password_create_ecs
-    LifeCycleTest.test_passowrd_start_ecs
+    LifeCycleTest.test_password_start_ecs
     LifeCycleTest.test_reset_password_ecs
     LifeCycleTest.test_create_ecs
     LifeCycleTest.test_start_ecs
     LifeCycleTest.test_stop_ecs
     LifeCycleTest.test_restart_ecs
     LifeCycleTest.test_reboot_inside_vm
-    LifeCycleTest.test_delete_ecs
     GeneralTest.test_verify_package_signed
     GeneralTest.test_check_virt_what
     GeneralTest.test_check_selinux
@@ -16,8 +15,12 @@ cases:
     GeneralTest.test_check_product_certificate
     GeneralTest.test_check_boot_message
     GeneralTest.test_check_kvm_pv_drivers
+    GeneralTest.test_files_controlled_by_rpm
+    GeneralTest.test_file_content_integrity
     GeneralTest.test_validation
     CloudDiskTest.test_online_attach_cloud_disks
     CloudDiskTest.test_online_detach_cloud_disks
     CloudDiskTest.test_offline_attach_cloud_disks
     CloudDiskTest.test_offline_detach_cloud_disks
+    MiscTest.test_local_disks
+    MiscTest.test_delete_ecs

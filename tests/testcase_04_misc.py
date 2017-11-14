@@ -19,7 +19,8 @@ class MiscTest(Test):
         self.project = prep.project
         self.vm_test01 = prep.vm_test01
         self.vm_params = prep.vm_params
-        if "ecs.i1" not in self.vm_params["InstanceType"] and "ecs.i2" not in self.vm_params["InstanceType"]:
+        if "ecs.i1" not in self.vm_params["InstanceType"] and "ecs.i2" not in self.vm_params["InstanceType"] \
+                and "test_delete_ecs" not in self.name.name:
             self.cancel("Skip for instance types not in ecs.i1/i2 series")
         args = []
         prep.vm_prepare(args)
@@ -50,6 +51,11 @@ class MiscTest(Test):
                              "Cannot write files on attached disk.\n {0}".format(output))
             cmd = "umount /mnt/vd%s"
             self.vm_test01.get_output(cmd % idx)
+
+    def test_delete_ecs(self):
+        self.log.info("Delete ECS")
+        self.vm_test01.delete()
+        self.vm_test01.wait_for_deleted()
 
     def tearDown(self):
         self.log.info("TearDown")

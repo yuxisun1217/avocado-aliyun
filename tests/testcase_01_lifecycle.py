@@ -22,7 +22,7 @@ class LifeCycleTest(Test):
         args = []
         if "password" in self.name.name:
             args.append("password")
-        if "test_create_ecs" in self.name.name:
+        if "create_ecs" in self.name.name:
             args.append("pre-delete")
         if "test_start_ecs" in self.name.name or \
            "test_modify_instance_type" in self.name.name:
@@ -37,7 +37,7 @@ class LifeCycleTest(Test):
         self.assertIsNotNone(self.vm_test01.get_public_address(),
                              "Fail to allocate public ip address")
 
-    def test_passowrd_start_ecs(self):
+    def test_password_start_ecs(self):
         self.log.info("Start ECS")
         self.vm_test01.start()
         self.vm_test01.wait_for_running()
