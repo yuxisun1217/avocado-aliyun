@@ -1,0 +1,9 @@
+instance_type: !mux
+    ecs.sccg5.24xlarge:
+        name: ecs.sccg5.24xlarge
+        cpu: 96
+        memory: 384
+    ecs.scch5.16xlarge:
+        name: ecs.scch5.16xlarge
+        cpu: 64
+        memory: 192
