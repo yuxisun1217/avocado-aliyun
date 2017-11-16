@@ -190,7 +190,7 @@ class VM(Base, GuestUtils):
 
     def describe_disks(self, params, diskid=None):
         logging.info("Describe cloud disks")
-        params.setdefault("DiskName", "avocado_autotest")
+        params.setdefault("DiskName", params["CloudDiskName"])
         params.setdefault("Category", "cloud_ssd")
         params.setdefault("PageSize", "100")
         if diskid:

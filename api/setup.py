@@ -76,6 +76,7 @@ class Setup(object):
             vswitch = self.vm.VSwitch(vswitch_params)
             vswitch.show()
             self.vm_params["VSwitchId"] = vswitch.id
+        self.vm_params["CloudDiskName"] = self.params.get('name', '*/CloudDisk/*')
         for param in kwargs:
             if param in self.vm_params:
                 self.vm_params[param] = kwargs.get(param)
