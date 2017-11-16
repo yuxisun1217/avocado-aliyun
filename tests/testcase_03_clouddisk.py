@@ -24,7 +24,7 @@ class CloudDiskTest(Test):
         if "offline" in self.name.name:
             args.append("pre-stop")
         if "ecs.i1" in self.vm_params["InstanceType"] or "ecs.i2" in self.vm_params["InstanceType"]:
-            self.disk_count = self.params.get('disk_count', '*/{0}/*'.format(instance_type))
+            self.disk_count = self.params.get('disk_count', '*/{0}/*'.format(self.vm_params["InstanceType"]))
         else:
             self.disk_count = 0
         prep.vm_prepare(args)
@@ -79,6 +79,7 @@ class CloudDiskTest(Test):
             output = self.vm_test01.get_output(cmd % idx)
             self.assertEqual(output, "",
                              "Disk not detached.\n {0}".format(output))
+
 
     def test_offline_attach_cloud_disks(self):
         self.log.info("Offline attach a cloud disk to VM")
