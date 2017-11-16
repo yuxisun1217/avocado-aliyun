@@ -242,6 +242,8 @@ class VM(Base, GuestUtils):
                 ret = self.is_stopped()
             elif status == "deleted":
                 ret = not self.exists()
+            elif status == "not_else":
+                ret = not self.is_else()
             else:
                 raise Exception("VM status {0} is wrong.".format(status))
             if ret:
@@ -289,7 +291,16 @@ class VM(Base, GuestUtils):
         """
         Return True if VM is stopped.
         """
-        if self.status == 2:
+        if self.status == 1:
+            return True
+        else:
+            return False
+
+    def is_else(self):
+        """
+        Return True if VM status is not Running/Stopped.
+        """
+        if self.status == 9:
             return True
         else:
             return False
@@ -301,8 +312,8 @@ class VM(Base, GuestUtils):
         :self.vm_status:
         -1: VM doesn't exist
         0:  VM is running
-        1:  VM is starting
-        2:  VM is stopped
+        1:  VM is stopped
+        9:  else(starting/stopping/pending)
         """
         if params.get("TotalCount") == 0:
             logging.info("VM doesn't exist.")
@@ -310,12 +321,12 @@ class VM(Base, GuestUtils):
         else:
             status = params["Instances"]["Instance"][0].get("Status")
             logging.info("VM status: %s", status)
-            if status == "Stopped":
-                self.status = 2
-            elif status == "Running":
+            if status == "Running":
                 self.status = 0
-            else:
+            elif status == "Stopped":
                 self.status = 1
+            else:
+                self.status = 9
 #        logging.info("VM status code: %d", self.status)
 
     def allocate_public_address(self):

@@ -123,6 +123,7 @@ class Setup(object):
             self.vm_test01.create(self.vm_params)
             self.vm_test01.wait_for_created()
         if not self.vm_test01.get_public_address():
+            self.vm_test01.wait_for_status(status="not_else")
             self.vm_test01.allocate_public_address()
         # If need pre-stopped VM, stop it and return.
         if "pre-stop" in args:
