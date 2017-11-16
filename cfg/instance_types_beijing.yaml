@@ -3,22 +3,37 @@ instance_type: !mux
         name: ecs.d1.2xlarge
         cpu: 8
         memory: 32
+        disk_count: 4
+        disk_size: 5500
+        disk_type: hdd
     ecs.d1.4xlarge:
         name: ecs.d1.4xlarge
         cpu: 16
         memory: 64
+        disk_count: 8
+        disk_size: 5500
+        disk_type: hdd
     ecs.d1.6xlarge:
         name: ecs.d1.6xlarge
         cpu: 24
         memory: 96
+        disk_count: 12
+        disk_size: 5500
+        disk_type: hdd
     ecs.d1.8xlarge:
         name: ecs.d1.8xlarge
         cpu: 32
         memory: 128
+        disk_count: 16
+        disk_size: 5500
+        disk_type: hdd
     ecs.d1.14xlarge:
         name: ecs.d1.14xlarge
         cpu: 56
         memory: 224
+        disk_count: 28
+        disk_size: 5500
+        disk_type: hdd
     ecs.hfg5.xlarge:
         name: ecs.hfg5.xlarge
         cpu: 4

@@ -19,7 +19,7 @@ class MiscTest(Test):
         self.project = prep.project
         self.vm_test01 = prep.vm_test01
         self.vm_params = prep.vm_params
-        if "ecs.i1" not in self.vm_params["InstanceType"] and "ecs.i2" not in self.vm_params["InstanceType"] \
+        if "ecs.i" not in self.vm_params["InstanceType"] and "ecs.d" not in self.vm_params["InstanceType"] \
                 and "test_delete_ecs" not in self.name.name:
             self.cancel("Skip for instance types not in ecs.i1/i2 series")
         args = []
@@ -32,7 +32,11 @@ class MiscTest(Test):
         disk_size = self.params.get('disk_size', '*/{0}/*'.format(instance_type))
         disk_type = self.params.get('disk_type', '*/{0}/*'.format(instance_type))
         for i in xrange(1, disk_count + 1):
-            idx = chr(97+i)
+            delta = self.disk_count + i
+            if delta <= 25:
+                idx = chr(97 + delta)
+            else:
+                idx = 'a' + chr(97 - 1 + delta % 25)
             cmd = "fdisk -l /dev/vd%s | grep '/dev/vd%s' | cut -d ',' -f 1 | cut -d ' ' -f 4"
             output = self.vm_test01.get_output(cmd % (idx, idx))
             self.assertEqual(output, "GB",
