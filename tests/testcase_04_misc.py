@@ -32,7 +32,7 @@ class MiscTest(Test):
         disk_size = self.params.get('disk_size', '*/{0}/*'.format(instance_type))
         disk_type = self.params.get('disk_type', '*/{0}/*'.format(instance_type))
         for i in xrange(1, disk_count + 1):
-            delta = self.disk_count + i
+            delta = i
             if delta <= 25:
                 idx = chr(97 + delta)
             else:
